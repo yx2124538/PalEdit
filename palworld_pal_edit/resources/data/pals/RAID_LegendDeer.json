@@ -1,8 +1,8 @@
 {
-    "CodeName": "LegendDeer",
+    "CodeName": "RAID_LegendDeer",
     "Type": [
-        "Normal",
-        "None"
+        "Water",
+        "Leaf"
     ],
     "Moveset": {
         "EPalWazaID::PowerShot": 1,
@@ -13,12 +13,19 @@
         "EPalWazaID::Unique_LegendDeer_WarpPillarBurst": 40,
         "EPalWazaID::Unique_LegendDeer_RadiantPurge_Otomo": 50
     },
-    "RaidMoveset": {},
+    "RaidMoveset": {
+        "EPalWazaID::RootLance": 1,
+        "EPalWazaID::CrossWind": 2,
+        "EPalWazaID::SolarBeam": 3,
+        "EPalWazaID::SeaGush": 4,
+        "EPalWazaID::WallSplash": 5,
+        "EPalWazaID::RipTide": 6
+    },
     "Scaling": {
-        "HP": 135,
+        "HP": 130,
         "PHY": 100,
-        "MAG": 130,
-        "DEF": 110
+        "MAG": 120,
+        "DEF": 120
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -26,8 +33,8 @@
         "Seeding": 0,
         "GenerateElectricity": 0,
         "Handcraft": 0,
-        "Collection": 3,
-        "Deforest": 4,
+        "Collection": 1,
+        "Deforest": 0,
         "Mining": 0,
         "OilExtraction": 0,
         "ProductMedicine": 0,

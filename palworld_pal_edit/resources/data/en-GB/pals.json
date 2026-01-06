@@ -218,6 +218,7 @@
 	"TentacleTurtle_Ground": "Turtacle Terra",
 	"IceNarwhal": "Whalaska",
 	"IceNarwhal_Fire": "Whalaska Ignis",
+	"LegendDeer": "Hartalis",
 
     "Male_Soldier01": "Burly Merc",
     "Male_Soldier02": "Newbie Pal Tamer",
@@ -439,6 +440,7 @@
     "MobuCitizen_Male": "Male Islander",
     "Male_DesertPeople01": "Male Villager (Desert)",
     "Female_DesertPeople02": "Female Villager (Desert)",
+    "Male_Kigurumi01_v01": "Islander (Depresso Costume)",
 
     "SUMMON_DarkAlien": "Xenovader 🧿",
     "SUMMON_DarkAlien_MAX": "Xenovader 🧿",
@@ -505,6 +507,13 @@
     "GYM_MoonQueen_2": "Saya & Selyne 🏰",
     "GYM_SnowTigerBeastman_2": "Bjorn & Bastigor 🏰",
 	"GYM_ElecPanda_Otomo": "Zoe & Grizzbolt (ALLY)",
+	"ForestBoss": "Lily (NPC)",
+	"GrassBoss": "Zoe (NPC)",
+	"ElectricBoss": "Axel (NPC)",
+	"SnowBoss": "Victor (NPC)",
+	"DesertBoss": "Marcus (NPC)",
+	"SakurajimaBoss": "Saya (NPC)",
+	"VikingBoss": "Bjorn (NPC)",
 
     "RAID_NightLady": "Bellanoir 🏅",
     "RAID_NightLady_Dark": "Bellanoir Libero 🏅",
@@ -513,10 +522,8 @@
     "RAID_KingBahamut_Dragon_2": "Blazamut Ryu 🏆",
     "RAID_DarkMechaDragon": "Xenolord 🏅",
     "RAID_DarkMechaDragon_2": "Xenolord 🏆",
-	"RAID_YakushimaBoss001_Green": "(DO NOT USE) Moon Lord Chest Eye",
-	"RAID_YakushimaBoss002": "(DO NOT USE) Moon Lord Head",
-	"RAID_YakushimaBoss002_Hand_Left": "(DO NOT USE) Moon Lord Left Arm",
-	"RAID_YakushimaBoss002_Hand_Right": "(DO NOT USE) Moon Lord Right Arm",
+	"RAID_LegendDeer": "Hartalis 🏅",
+	"RAID_LegendDeer_2": "Hartalis 🏆",
 	
 	"YakushimaMonster001": "Slime (Green)",
 	"YakushimaMonster001_Blue": "Slime (Blue)",
