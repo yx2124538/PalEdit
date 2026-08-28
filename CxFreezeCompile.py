@@ -13,8 +13,8 @@ base = "gui"
 base = "console"
 
 setup(
-    name = "PalEdit v0.13.1",
-    version = "0.13.1",
+    name = "PalEdit v0.13.2",
+    version = "0.13.2",
     description = "A simple tool for editing PalWorld saves",
     options={"build_exe": build_options},
     executables=[Executable("PalEdit.py", base=base, icon="palworld_pal_edit/resources/MossandaIcon.ico")],

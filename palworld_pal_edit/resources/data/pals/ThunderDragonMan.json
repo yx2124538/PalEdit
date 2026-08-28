@@ -18,9 +18,11 @@
     "RaidMoveset": {},
     "Scaling": {
         "HP": 120,
-        "PHY": 130,
+        "PHY": 100,
         "MAG": 130,
-        "DEF": 115
+        "DEF": 115,
+        "SUP": 100,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -42,5 +44,11 @@
         "ElementBoost_Thunder_2_PAL"
     ],
     "DeckIndex": 187,
-    "TowerBoss": false
+    "TowerBoss": false,
+    "Trust": {
+        "HP": 3.0,
+        "ATK": 1.3,
+        "DEF": 1.9,
+        "WRK": 0.0
+    }
 }

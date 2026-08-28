@@ -10,7 +10,9 @@
         "HP": 130,
         "PHY": 80,
         "MAG": 120,
-        "DEF": 90
+        "DEF": 90,
+        "SUP": 80,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -27,5 +29,11 @@
         "Transport": 0,
         "MonsterFarm": 0
     },
-    "Human": false
+    "Human": false,
+    "Trust": {
+        "HP": 2.5,
+        "ATK": 1.7,
+        "DEF": 2.9,
+        "WRK": 0.0
+    }
 }

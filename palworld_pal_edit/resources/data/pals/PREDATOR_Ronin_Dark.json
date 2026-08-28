@@ -30,9 +30,11 @@
     },
     "Scaling": {
         "HP": 96,
-        "PHY": 125,
+        "PHY": 100,
         "MAG": 125,
-        "DEF": 80
+        "DEF": 80,
+        "SUP": 100,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 2,
@@ -52,5 +54,11 @@
     "Human": false,
     "InnatePassives": [],
     "DeckIndex": -1,
-    "TowerBoss": false
+    "TowerBoss": false,
+    "Trust": {
+        "HP": 4.2,
+        "ATK": 1.5,
+        "DEF": 3.3,
+        "WRK": 0.0
+    }
 }

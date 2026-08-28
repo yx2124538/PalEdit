@@ -12,7 +12,7 @@
   "attack_soul_lbl": "Attacco",
   "defence_soul_lbl": "Difesa",
   "working_soul_lbl": "Velocità delle attività",
-  
+
   "electricity_lbl": "Elettricità",
   "dark_lbl": "Oscurità",
   "leaf_lbl": "Erba",
@@ -23,11 +23,12 @@
   "fire_lbl": "Fuoco",
   "none_lbl": "Nessuno",
   "ice_lbl": "Ghiaccio",
-  
+
   "lucky_lbl": "Fortunato",
   "alpha_lbl": "Alfa",
   "name_prop": "Specie",
   "gender_prop": "Genere",
+  "attack_prop": "Attacco",
   "mattack_prop": "Fisico",
   "sattack_prop": "Magico",
   "defence_prop": "Difesa",
@@ -70,5 +71,8 @@
   "msg_converting": "Conversione in corso... l'operazione può richiedere del tempo.",
   "select_file": "Seleziona un file",
   "msg_select_save_file": "Seleziona un file di salvataggio.",
-  "msg_done": "Caricamento concluso!"
+  "msg_done": "Caricamento concluso!",
+
+  "trust_lbl": "Amicizia",
+  "awakening_lbl": "Risveglio"
 }

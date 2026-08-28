@@ -61,5 +61,8 @@
   "msg_select_save_file": "请选择存档文件.",
   "msg_done": "完成加载!",
   "mattack_prop": "物理",
-  "sattack_prop": "魔法"
+  "sattack_prop": "魔法",
+
+  "trust_lbl": "友好度",
+  "awakening_lbl": "觉醒"
 }

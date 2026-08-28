@@ -125,6 +125,18 @@ xpthresholds = [
 while len(xpthresholds) < 80:
     xpthresholds.append(xpthresholds[-1])
 
+xpthresholds = []
+with open("%s/resources/data/levels.json" % (module_dir), "r",
+              encoding="utf8") as levelfile:
+    lvl = json.loads(levelfile.read())
+    xpthresholds = lvl["values"]
+
+trustthresholds = []
+with open("%s/resources/data/friendship.json" % (module_dir), "r",
+              encoding="utf8") as trustfile:
+    trust = json.loads(trustfile.read())
+    trustthresholds = trust["values"]
+
 
 
 class PalGender(Enum):
@@ -134,7 +146,7 @@ class PalGender(Enum):
 
 
 class PalObject:
-    def __init__(self, name, code_name, primary, secondary="None", human=False, tower=False, scaling=None, suits={}):
+    def __init__(self, name, code_name, primary, secondary="None", human=False, tower=False, scaling=None, trustscale=None, suits={}):
         self._name = name
         self._code_name = code_name
         self._img = None
@@ -143,6 +155,7 @@ class PalObject:
         self._human = human
         self._tower = tower
         self._scaling = scaling
+        self._trustscale = trustscale
         self._suits = suits
 
     def GetName(self):
@@ -191,6 +204,9 @@ class PalObject:
 
     def GetScaling(self):
         return self._scaling
+
+    def GetTrustScale(self):
+        return self._trustscale
 
     def IsHuman(self):
         return self._human
@@ -276,6 +292,9 @@ class PalEntity:
         # don't write it.
         self._obj.pop("Talent_Melee", None)
 
+        if not "bIsAwakening" in self._obj:
+            self._obj["bIsAwakening"] = copy.deepcopy(EmptyAwakeningObject)
+
         if not "Talent_Shot" in self._obj:
             self._obj['Talent_Shot'] = copy.deepcopy(EmptyTalentObject)
         self._ranged = self._obj['Talent_Shot']['value']["value"]
@@ -287,6 +306,12 @@ class PalEntity:
         if not "Rank" in self._obj:
             self._obj['Rank'] = copy.deepcopy(EmptyRankObject)
         self._rank = self._obj['Rank']['value']['value']
+
+        if "FriendshipPoint" not in self._obj:
+            self._obj["FriendshipPoint"] = copy.deepcopy(EmptyTrustObject)
+        self._trust = self._obj["FriendshipPoint"]["value"]
+        tl = self.GetTrustLevel()
+        self.extratrust = self._trust - trustthresholds[tl+3]
 
         # Fix broken ranks
         if self.GetRank() < 1 or self.GetRank() > 5:
@@ -349,6 +374,15 @@ class PalEntity:
         # CraftSpeeds is a pre-1.0 field; 1.0 saves don't have it. Drop it on
         # load so re-saving matches the current format.
         self._obj.pop("CraftSpeeds", None)
+
+    def IsAwakened(self):
+        return self._obj["bIsAwakening"]["value"]
+
+    def SetAwakened(self, value=None):
+        if value == None:
+            self._obj["bIsAwakening"]["value"] = (not self._obj["bIsAwakening"]["value"])
+        else:
+            self._obj["bIsAwakening"]["value"] = value
                 
                 
     def GetSuit(self, suit):
@@ -372,6 +406,27 @@ class PalEntity:
             t["WorkSuitability"]["value"]["value"] = key
             t["Rank"]["value"] = value
             entries.append(t)
+
+    def SetTrust(self, level):
+        if level < -3 or level > 10: return
+
+        # Need to add a way to maintain current friendship points between levels
+        xt = trustthresholds[level+3]
+        if level + 3 < len(trustthresholds):
+            xt += self.extratrust
+        self._obj["FriendshipPoint"]["value"] = self._trust = xt
+
+    def GetTrust(self):
+        xt = self._trust
+        if self.GetTrustLevel() + 3 < len(trustthresholds):
+            xt -= self.extratrust
+        return xt
+
+    def GetTrustLevel(self):
+        for i in range(len(trustthresholds)):
+            if trustthresholds[i] > self._trust:
+                return (i-1) -3
+        return (len(trustthresholds)-1)-3
 
     def IsHuman(self):
         return self._type._human
@@ -532,6 +587,7 @@ class PalEntity:
         this species at this level, for comparing against the pal's actual."""
         LEVEL = self.GetLevel()
         SCALING = self.GetObject().GetScaling()
+        TRUST = self.GetObject().GetTrustScale()
         talent_hp = 0 if baseline else self.GetTalentHP()
         talent_at = 0 if baseline else self.GetAttackMelee()
         talent_rn = 0 if baseline else self.GetAttackRanged()
@@ -540,6 +596,7 @@ class PalEntity:
         soul_at = 0 if baseline else self.GetRankAttack()
         soul_df = 0 if baseline else self.GetRankDefence()
         rank = 1 if baseline else self.GetRank()
+        fren = 1 if baseline else self.GetTrustLevel()
 
         if SCALING == None:
             print(self.GetObject().GetName())
@@ -550,7 +607,7 @@ class PalEntity:
         HP_SOUL = soul_hp * 0.03
         HP_RANK = (rank - 1) * 0.05
 
-        HP_STAT = math.floor(500 + 5 * LEVEL + HP_SCALE * 0.5 * LEVEL * (1 + HP_IV))
+        HP_STAT = math.floor(500 + 5 * LEVEL + (HP_SCALE + TRUST["HP"] * fren) * 0.5 * LEVEL * (1 + HP_IV))
         HP_STAT = math.floor(HP_STAT * (1 + HP_SOUL) * (1 + HP_RANK))
 
         AT_SCALE = SCALING["PHY"]
@@ -558,7 +615,7 @@ class PalEntity:
         AT_SOUL = soul_at * 0.03
         AT_RANK = (rank - 1) * 0.05
 
-        AT_STAT = math.floor(100 + AT_SCALE * 0.075 * LEVEL * (1 + AT_IV))
+        AT_STAT = math.floor(100 + (AT_SCALE + TRUST["ATK"] * fren) * 0.075 * LEVEL * (1 + AT_IV))
         AT_STAT = math.floor(AT_STAT * (1 + AT_SOUL) * (1 + AT_RANK))
 
         MT_SCALE = SCALING["MAG"]
@@ -566,7 +623,7 @@ class PalEntity:
         MT_SOUL = soul_at * 0.03
         MT_RANK = (rank - 1) * 0.05
 
-        MT_STAT = math.floor(100 + MT_SCALE * 0.075 * LEVEL * (1 + MT_IV))
+        MT_STAT = math.floor(100 + (MT_SCALE + TRUST["ATK"] * fren) * 0.075 * LEVEL * (1 + MT_IV))
         MT_STAT = math.floor(MT_STAT * (1 + MT_SOUL) * (1 + MT_RANK))
 
         DF_SCALE = SCALING["DEF"]
@@ -574,7 +631,7 @@ class PalEntity:
         DF_SOUL = soul_df * 0.03
         DF_RANK = (rank - 1) * 0.05
 
-        DF_STAT = math.floor(50 + DF_SCALE * 0.075 * LEVEL * (1 + DF_IV))
+        DF_STAT = math.floor(50 + (DF_SCALE + TRUST["DEF"] * fren) * 0.075 * LEVEL * (1 + DF_IV))
         DF_STAT = math.floor(DF_STAT * (1 + DF_SOUL) * (1 + DF_RANK))
         return {"HP": HP_STAT, "PHY": AT_STAT, "MAG": MT_STAT, "DEF": DF_STAT}
 
@@ -1125,6 +1182,7 @@ def LoadPals(lang="en-GB"):
                 s = i["Type"][1]
             PalSpecies[i["CodeName"]] = PalObject(l[i["CodeName"]] if i["CodeName"] in l else i["CodeName"], i["CodeName"], p, s, h, t,
                                                   i["Scaling"] if "Scaling" in i else None,
+                                                  i["Trust"] if "Trust" in i else None,
                                                   i["Suitabilities"] if "Suitabilities" in i else {})
             PalSpecies[i["CodeName"]]._innate_passives = i.get("InnatePassives", [])
             PalSpecies[i["CodeName"]]._deck_index = i.get("DeckIndex", -1)
@@ -1132,6 +1190,7 @@ def LoadPals(lang="en-GB"):
             if t:
                 PalSpecies[i["CodeName"]]._suits = PalSpecies[i["CodeName"].replace("GYM_", "")]._suits
                 PalSpecies[i["CodeName"]]._scaling = PalSpecies[i["CodeName"].replace("GYM_", "")]._scaling
+                PalSpecies[i["CodeName"]]._trustscale = PalSpecies[i["CodeName"].replace("GYM_", "")]._trustscale
             PalLearnSet[i["CodeName"]] = i["Moveset"] if not t else PalLearnSet[i["CodeName"].replace("GYM_", "")]
 
         # index by lowercased CodeName for the case-insensitive lookup below

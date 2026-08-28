@@ -16,9 +16,11 @@
     },
     "Scaling": {
         "HP": 110,
-        "PHY": 120,
+        "PHY": 100,
         "MAG": 120,
-        "DEF": 130
+        "DEF": 130,
+        "SUP": 100,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -40,5 +42,11 @@
         "Alien"
     ],
     "DeckIndex": 146,
-    "TowerBoss": false
+    "TowerBoss": false,
+    "Trust": {
+        "HP": 3.5,
+        "ATK": 1.7,
+        "DEF": 1.3,
+        "WRK": 0.0
+    }
 }

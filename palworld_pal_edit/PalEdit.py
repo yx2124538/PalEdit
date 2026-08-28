@@ -123,7 +123,7 @@ import traceback
 
 
 class PalEditConfig:
-    version = "0.13.1 (Palworld 1.0)"
+    version = "0.13.2 (Palworld 1.0)"
     ftsize = 18
     font = "Microsoft YaHei"
     # index = rating + 3; Palworld 1.0 adds rating-5 passives (last entry)
@@ -295,6 +295,17 @@ class PalEdit():
         # print(f"{pal._obj}")
         pyperclip.copy(f"{pal._obj}")
         webbrowser.open('https://jsonformatter.curiousconcept.com/#')
+
+    def changefriendship(self):
+        if not self.isPalSelected():
+            return
+        i = int(self.listdisplay.curselection()[0])
+        pal = self.FilteredPals()[i]
+
+        tv = self.trustvar.get()
+        pal.SetTrust(tv)
+        self.trustvalue.config(text=str(tv))
+        self.updatestats()
 
     def updateAttacks(self):
         if not self.isPalSelected():
@@ -807,6 +818,7 @@ class PalEdit():
 
         self.luckyvar.set(pal.isLucky)
         self.alphavar.set(pal.isBoss)
+        self.awakenvar.set(pal.IsAwakened())
 
         self.updateSkillMenu()
         self.updateAttacks()
@@ -865,6 +877,7 @@ class PalEdit():
         self.atsoulvar.set(pal.GetRankAttack())
         self.dfsoulvar.set(pal.GetRankDefence())
         self.wssoulvar.set(pal.GetRankWorkSpeed())
+        self.trustvar.set(pal.GetTrustLevel())
 
         s = pal.GetSkills()[:]
         while len(s) < 4:
@@ -2319,6 +2332,17 @@ Do you want to use %s's DEFAULT Scaling (%s)?
         self.replaceitem(i, pal)
         self.refresh(i)
 
+    def toggleawaken(self):
+        if not self.isPalSelected():
+            return
+        i = int(self.listdisplay.curselection()[0])
+        pal = self.FilteredPals()[i]
+
+        pal.SetAwakened(True if self.awakenvar.get() == 1 else False)
+        self.replaceitem(i, pal)
+        self.refresh(i)
+
+
     def togglealpha(self):
         if not self.isPalSelected():
             return
@@ -2677,6 +2701,26 @@ Do you want to use %s's DEFAULT Scaling (%s)?
         # Attack Skills
         atkskill = tk.Frame(root, width=120, relief="groove", borderwidth=2)
         atkskill.pack(side=tk.constants.RIGHT, fill=tk.constants.Y)
+
+        # Friendship
+        trustLabel = tk.Label(atkskill, bg="darkgrey", width=12, text=self.i18n['trust_lbl'],
+                              font=(PalEditConfig.font, PalEditConfig.ftsize),
+                            justify="center")
+        self.i18n_el['trust_lbl'] = trustLabel
+        trustLabel.pack(fill=tk.constants.X)
+
+        self.trustvar = tk.IntVar()
+        self.trustvar.set(10)
+        self.trustvar.trace_add("write", lambda *args: self.changefriendship())
+
+        trustframe = tk.Frame(atkskill)
+        trustframe.pack(fill=tk.constants.X)
+        self.trustvalue = tk.Label(trustframe, width=8, text="10", font=(PalEditConfig.font, PalEditConfig.ftsize))
+        self.trustvalue.pack(side=tk.constants.LEFT, fill=tk.constants.X,)
+        trustbar = tk.Scale(trustframe, showvalue=False, variable=self.trustvar, from_=-3, to=10, orient=HORIZONTAL)
+        trustbar.pack(side=tk.constants.RIGHT, fill=tk.constants.X, expand=True)
+        
+        # Attack Skills Continued
         atkLabel = tk.Label(atkskill, bg="darkgrey", width=12, text=self.i18n['atk_lbl'],
                             font=(PalEditConfig.font, PalEditConfig.ftsize),
                             justify="center")
@@ -2790,10 +2834,15 @@ Do you want to use %s's DEFAULT Scaling (%s)?
         self.i18n_el['dark_lbl'] = self.stype
         self.stype.pack(side=tk.constants.RIGHT, expand=True, fill=tk.constants.X)
 
-        formframe = tk.Frame(resourceview)
-        formframe.pack(expand=True, fill=tk.constants.X)
+        checkframe = tk.Frame(resourceview)
+        checkframe.pack(expand=True, fill=tk.constants.X)
+        formframe = tk.Frame(checkframe)
+        formframe.pack(side=tk.constants.RIGHT, expand=True, fill=tk.constants.X)
+        
         self.luckyvar = tk.IntVar()
         self.alphavar = tk.IntVar()
+        self.awakenvar = tk.IntVar()
+        
         self.luckybox = tk.Checkbutton(formframe, text=self.i18n['lucky_lbl'], variable=self.luckyvar, onvalue='1',
                                   offvalue='0',
                                   command=self.togglelucky)
@@ -2804,6 +2853,12 @@ Do you want to use %s's DEFAULT Scaling (%s)?
                                   command=self.togglealpha)
         self.i18n_el['alpha_lbl'] = self.alphabox
         self.alphabox.pack(side=tk.constants.RIGHT, expand=True)
+
+        self.awakenbox = tk.Checkbutton(checkframe, text=self.i18n['awakening_lbl'], variable=self.awakenvar, onvalue='1',
+                                  offvalue='0',
+                                  command=self.toggleawaken)
+        self.i18n_el['lucky_lbl'] = self.awakenbox
+        self.awakenbox.pack(side=tk.constants.LEFT, expand=True)
 
         button = Button(resourceview, text=self.i18n['btn_clone_pal'], command=self.clonepal)
         button.config(font=(PalEditConfig.font, 12))
@@ -2906,23 +2961,25 @@ Do you want to use %s's DEFAULT Scaling (%s)?
                       width=10)
         self.i18n_el['hp_prop'] = hp
         hp.pack(expand=True, fill=tk.constants.X)
-        mattack = tk.Label(statlabelview, text=self.i18n['mattack_prop'], font=(PalEditConfig.font, PalEditConfig.ftsize),
+        #mattack = tk.Label(statlabelview, text=self.i18n['mattack_prop'], font=(PalEditConfig.font, PalEditConfig.ftsize),
+        #                  bg="darkgrey",
+        #                  width=8)
+        #self.i18n_el['mattack_prop'] = mattack
+        #mattack.pack(expand=True, fill=tk.constants.X)
+        #sattack = tk.Label(statlabelview, text=self.i18n['sattack_prop'], font=(PalEditConfig.font, PalEditConfig.ftsize),
+        #                  bg="darkgrey",
+        #                  width=8)
+        #self.i18n_el['sattack_prop'] = sattack
+        #sattack.pack(expand=True, fill=tk.constants.X)
+        attack = tk.Label(statlabelview, text=self.i18n['attack_prop'], font=(PalEditConfig.font, PalEditConfig.ftsize),
                           bg="darkgrey",
                           width=8)
-        self.i18n_el['mattack_prop'] = mattack
-        mattack.pack(expand=True, fill=tk.constants.X)
-        sattack = tk.Label(statlabelview, text=self.i18n['sattack_prop'], font=(PalEditConfig.font, PalEditConfig.ftsize),
-                          bg="darkgrey",
-                          width=8)
-        self.i18n_el['sattack_prop'] = sattack
-        sattack.pack(expand=True, fill=tk.constants.X)
-        
+        self.i18n_el['attack_prop'] = attack
+        attack.pack(expand=True, fill=tk.constants.X) 
         defence = tk.Label(statlabelview, text=self.i18n['defence_prop'], font=(PalEditConfig.font, PalEditConfig.ftsize),
                            bg="darkgrey", width=8)
         self.i18n_el['defence_prop'] = defence
         defence.pack(expand=True, fill=tk.constants.X)
-        
-
 
         statvals = tk.Frame(statinfoview, width=6)
         statvals.pack(side=tk.constants.RIGHT, expand=True, fill=tk.constants.X)
@@ -2933,7 +2990,7 @@ Do you want to use %s's DEFAULT Scaling (%s)?
         self.hthstatval.pack(fill=tk.constants.X)
         self.matkstatval = tk.Label(statvals, bg="darkgrey", text="100", font=(PalEditConfig.font, PalEditConfig.ftsize),
                                    justify="center")
-        self.matkstatval.pack(fill=tk.constants.X)
+        #self.matkstatval.pack(fill=tk.constants.X)
         self.satkstatval = tk.Label(statvals, bg="darkgrey", text="100", font=(PalEditConfig.font, PalEditConfig.ftsize),
                                    justify="center")
         self.satkstatval.pack(fill=tk.constants.X)
@@ -2942,7 +2999,7 @@ Do you want to use %s's DEFAULT Scaling (%s)?
         self.defstatval.pack(fill=tk.constants.X)
 
         # detailed stat / potential breakdown popup
-        statdetailbtn = tk.Button(statview, text="📊 Details", borderwidth=1,
+        statdetailbtn = tk.Button(deckview, text="📊 Details", borderwidth=1,
                                   font=(PalEditConfig.font, PalEditConfig.ftsize - 8),
                                   command=self.open_stats_detail)
         statdetailbtn.pack(side=tk.constants.BOTTOM, fill=tk.constants.X)
@@ -3064,17 +3121,17 @@ Do you want to use %s's DEFAULT Scaling (%s)?
                                                                                                               entry))
         
         meleeframe = tk.Frame(stateditview, width=6, bg="darkgrey")
-        meleeframe.pack(fill=tk.constants.X)
+        #meleeframe.pack(fill=tk.constants.X)
         
         self.meleevar = tk.IntVar()
         self.meleevar.dirty = False
         self.meleevar.set(100)
         meleeicon = tk.Label(meleeframe, width=2, text="⚔", font=(PalEditConfig.font, PalEditConfig.ftsize))
-        meleeicon.pack(side=tk.constants.LEFT)
+        #meleeicon.pack(side=tk.constants.LEFT)
         palmelee = tk.Entry(meleeframe, textvariable=self.meleevar, font=(PalEditConfig.font, PalEditConfig.ftsize), width=6)
         palmelee.config(justify="center", validate="all", validatecommand=(valreg, '%P'))
         palmelee.bind("<FocusOut>", lambda event, var=self.meleevar: try_update(var))
-        palmelee.pack(side=tk.constants.RIGHT, expand=True, fill=tk.constants.X, pady=1)
+        #palmelee.pack(side=tk.constants.RIGHT, expand=True, fill=tk.constants.X, pady=1)
         self.meleevar.trace_add("write", lambda name, index, mode, sv=self.meleevar, entry=palmelee: validate_and_mark_dirty(sv, entry))
 
 
@@ -3085,7 +3142,7 @@ Do you want to use %s's DEFAULT Scaling (%s)?
         self.shotvar.dirty = False
         self.shotvar.set(100)
         shoticon = tk.Label(shotframe, width=2, text="🏹", font=(PalEditConfig.font, PalEditConfig.ftsize))
-        shoticon.pack(side=tk.constants.LEFT)
+        #shoticon.pack(side=tk.constants.LEFT)
         palshot = tk.Entry(shotframe, textvariable=self.shotvar, font=(PalEditConfig.font, PalEditConfig.ftsize),
                            width=6)
         palshot.config(justify="center", validate="all", validatecommand=(valreg, '%P'))
@@ -3104,7 +3161,7 @@ Do you want to use %s's DEFAULT Scaling (%s)?
         paldef.pack(expand=True, fill=tk.constants.X, pady=1)
         self.defvar.trace_add("write",
                               lambda name, index, mode, sv=self.defvar, entry=paldef: validate_and_mark_dirty(sv,
-                                                                                                              entry))        
+                                                                                                              entry))
 
         """
         talent_hp_var = IntVar(value=50)

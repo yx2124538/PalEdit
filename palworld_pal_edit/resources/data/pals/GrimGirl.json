@@ -17,9 +17,11 @@
     "RaidMoveset": {},
     "Scaling": {
         "HP": 95,
-        "PHY": 115,
+        "PHY": 100,
         "MAG": 115,
-        "DEF": 105
+        "DEF": 105,
+        "SUP": 100,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -41,5 +43,11 @@
         "PAL_sadist"
     ],
     "DeckIndex": 153,
-    "TowerBoss": false
+    "TowerBoss": false,
+    "Trust": {
+        "HP": 4.3,
+        "ATK": 1.9,
+        "DEF": 2.3,
+        "WRK": 0.0
+    }
 }

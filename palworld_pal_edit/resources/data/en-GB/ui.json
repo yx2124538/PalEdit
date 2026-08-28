@@ -12,7 +12,7 @@
   "attack_soul_lbl": "Attack",
   "defence_soul_lbl": "Defence",
   "working_soul_lbl": "Working",
-  
+
   "electricity_lbl": "Electric",
   "dark_lbl": "Dark",
   "leaf_lbl": "Grass",
@@ -23,7 +23,7 @@
   "fire_lbl": "Fire",
   "none_lbl": "None",
   "ice_lbl": "Ice",
-  
+
   "lucky_lbl": "Lucky",
   "alpha_lbl": "Alpha",
   "name_prop": "Species",
@@ -31,6 +31,7 @@
   "mattack_prop": "Physical",
   "sattack_prop": "Magical",
   "defence_prop": "Defence",
+  "attack_prop": "Attack",
   "workspeed_prop": "Workspeed",
   "hp_prop": "HP",
   "rank_prop": "Rank",
@@ -71,5 +72,8 @@
   "msg_converting": "Converting... this may take a while.",
   "select_file": "Select a file",
   "msg_select_save_file": "Please select a save file.",
-  "msg_done": "Done loading!"
+  "msg_done": "Done loading!",
+
+  "trust_lbl": "Friendship",
+  "awakening_lbl": "Awakened"
 }

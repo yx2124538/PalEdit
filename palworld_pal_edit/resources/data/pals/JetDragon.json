@@ -19,9 +19,11 @@
     "RaidMoveset": {},
     "Scaling": {
         "HP": 115,
-        "PHY": 140,
+        "PHY": 100,
         "MAG": 140,
-        "DEF": 120
+        "DEF": 120,
+        "SUP": 100,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -44,5 +46,11 @@
         "ElementBoost_Dragon_2_PAL"
     ],
     "DeckIndex": 202,
-    "TowerBoss": false
+    "TowerBoss": false,
+    "Trust": {
+        "HP": 3.3,
+        "ATK": 1.0,
+        "DEF": 1.7,
+        "WRK": 0.0
+    }
 }

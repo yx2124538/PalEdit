@@ -17,9 +17,11 @@
     "RaidMoveset": {},
     "Scaling": {
         "HP": 90,
-        "PHY": 95,
+        "PHY": 100,
         "MAG": 95,
-        "DEF": 85
+        "DEF": 85,
+        "SUP": 100,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -39,5 +41,11 @@
     "Human": false,
     "InnatePassives": [],
     "DeckIndex": 169,
-    "TowerBoss": false
+    "TowerBoss": false,
+    "Trust": {
+        "HP": 4.5,
+        "ATK": 2.7,
+        "DEF": 3.1,
+        "WRK": 0.0
+    }
 }

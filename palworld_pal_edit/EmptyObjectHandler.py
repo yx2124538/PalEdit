@@ -7,6 +7,18 @@ EmptySkillObject = {
     "type": "ArrayProperty"
 }
 
+EmptyTrustObject = {
+    "id": None,
+    "value": 0,
+    "type": "IntProperty"
+}
+
+EmptyAwakeningObject = {
+    "value": False,
+    "id": None,
+    "type": "BoolProperty"
+}
+
 EmptyLevelObject = {
     "id": None,
     "value": {"value": 1, "type":"None"},

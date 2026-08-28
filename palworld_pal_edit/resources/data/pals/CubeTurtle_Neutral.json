@@ -19,7 +19,9 @@
         "HP": 95,
         "PHY": 100,
         "MAG": 100,
-        "DEF": 140
+        "DEF": 140,
+        "SUP": 100,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -39,5 +41,11 @@
     "Human": false,
     "InnatePassives": [],
     "DeckIndex": 142,
-    "TowerBoss": false
+    "TowerBoss": false,
+    "Trust": {
+        "HP": 4.3,
+        "ATK": 2.5,
+        "DEF": 1.0,
+        "WRK": 0.0
+    }
 }

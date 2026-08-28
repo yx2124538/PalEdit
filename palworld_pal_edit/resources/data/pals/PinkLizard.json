@@ -21,7 +21,9 @@
         "HP": 120,
         "PHY": 70,
         "MAG": 70,
-        "DEF": 70
+        "DEF": 70,
+        "SUP": 140,
+        "WRK": 100
     },
     "Suitabilities": {
         "EmitFlame": 0,
@@ -43,5 +45,11 @@
         "ElementResist_Normal_1_PAL"
     ],
     "DeckIndex": 69,
-    "TowerBoss": false
+    "TowerBoss": false,
+    "Trust": {
+        "HP": 3.0,
+        "ATK": 3.7,
+        "DEF": 3.7,
+        "WRK": 0.0
+    }
 }
