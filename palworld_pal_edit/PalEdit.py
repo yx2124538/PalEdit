@@ -2857,7 +2857,7 @@ Do you want to use %s's DEFAULT Scaling (%s)?
         self.awakenbox = tk.Checkbutton(checkframe, text=self.i18n['awakening_lbl'], variable=self.awakenvar, onvalue='1',
                                   offvalue='0',
                                   command=self.toggleawaken)
-        self.i18n_el['lucky_lbl'] = self.awakenbox
+        self.i18n_el['awakening_lbl'] = self.awakenbox
         self.awakenbox.pack(side=tk.constants.LEFT, expand=True)
 
         button = Button(resourceview, text=self.i18n['btn_clone_pal'], command=self.clonepal)
